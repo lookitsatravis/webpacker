@@ -11,16 +11,9 @@ namespace :webpacker do
       exit! $?.exitstatus
     end
 
-    webpack_digests = JSON.parse(result)['assetsByChunkName'].each_with_object({}) do |(chunk, file), h|
-      h[chunk] = file.is_a?(Array) ? file.find {|f| REGEX_MAP !~ f } : file
-    end.to_json
-
-    digests_path = Rails.application.config.x.webpacker[:digests_path]
-    packs_path = Rails.root.join('public', dist_dir) || File.dirname(digests_path)
-    packs_digests_path = digests_path || Rails.root.join(packs_path, 'digests.json')
-
-    FileUtils.mkdir_p(packs_path)
-    File.open(packs_digests_path, 'w+') { |file| file.write webpack_digests }
+    packs_path = Rails.root.join("public", dist_dir)
+    packs_digests_path = Rails.root.join(dist_dir, 'digest.json')
+    webpack_digests = JSON.parse(File.read(packs_digests_path))
 
     puts "Compiled digests for all packs in #{packs_digests_path}: "
     puts webpack_digests
