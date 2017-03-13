@@ -12,7 +12,7 @@ namespace :webpacker do
     end
 
     packs_path = Rails.root.join("public", dist_dir)
-    packs_digests_path = Rails.root.join(dist_dir, 'digest.json')
+    packs_digests_path = Rails.root.join(packs_path, 'digests.json')
     webpack_digests = JSON.parse(File.read(packs_digests_path))
 
     puts "Compiled digests for all packs in #{packs_digests_path}: "
